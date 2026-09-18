@@ -1,191 +1,150 @@
-# SmartCampus: University Academic & Resource Management System
+# SmartCampus: University Course Registration & Campus Management System
 
-[![Java Version](https://img.shields.io/badge/Java-17%2B-orange.svg)](https://www.oracle.com/java/)
-[![Build Tool](https://img.shields.io/badge/Build-Maven%20%7C%20Batch-blue.svg)](https://maven.apache.org/)
-[![License](https://img.shields.io/badge/License-Academic%20Evaluation-green.svg)]()
-[![Platform](https://img.shields.io/badge/Platform-Cross--Platform%20%28Windows%2FLinux%2FmacOS%29-brightgreen.svg)]()
-
-> Developed as an original flipped course engineering project for **VITyarthi - Build Your Own Project** evaluation.
+**Course:** Object Oriented Programming with Java (CSE2005)  
+**Institution:** Vellore Institute of Technology (VIT)  
+**Author:** Shivya (Reg No: 24BCY10203)  
+**Submission:** VITyarthi Flipped Course Project  
 
 ---
 
-## 1. Project Title & Overview
+## What is this project?
 
-**SmartCampus** is an enterprise-grade, modular Object-Oriented Java application designed to automate and streamline core university academic operations. Modeled closely around the **Fully Flexible Credit System (FFCS)** popularized by premier academic institutions such as Vellore Institute of Technology (VIT), the system provides an integrated platform for:
-1. **Intelligent Course Registration & Slot Clash Interception**: Prevents schedule conflicts between theory/lab slots and enforces course prerequisites.
-2. **Dynamic Seat Allocation & Automated Waitlist Promotion**: Uses thread-safe queues to automatically promote waitlisted students when seats become available.
-3. **Campus Infrastructure Reservation**: Coordinates physical resource bookings (high-performance computing labs, seminar auditoriums, study pods) with conflict prevention and administrative approval workflows.
-4. **Academic Tuition & Financial Ledger**: Automates per-credit fee computations, invoice issuance, and payment receipt reconciliation.
-5. **High-Performance Asynchronous Auditing**: Employs a multithreaded producer-consumer logging subsystem using `BlockingQueue` and background worker threads.
-6. **Stream-Driven Institutional Analytics**: Leverages modern Java Stream API and functional reductions for real-time executive reporting.
+In universities like VIT, course registration follows the Fully Flexible Credit System (FFCS). Students pick their own slots, courses, and faculties. During registration, things often get messy because:
+- People accidentally pick courses in the same slot (like two theory courses in B1).
+- Students try taking advanced courses without completing the prerequisites.
+- When popular courses fill up, seats that get dropped later don't always go to the people waiting in line.
+- Booking computer labs or project rooms usually happens on paper or random forms, which leads to two people booking the same room at the same time.
 
----
-
-## 2. Key Features
-
-- **Role-Based Access Control (RBAC)**: Distinct dashboards and privilege levels for `Student`, `Faculty`, and `Admin` users.
-- **Cryptographic Security**: Secure SHA-256 password hashing for identity validation.
-- **FFCS Timetable Slot Clash Detection**: Algorithmic validation preventing students from registering for courses with overlapping day/time windows.
-- **Prerequisite Validation**: Guarding higher-level coursework against missing foundation subjects.
-- **Automated Waitlist Promotion Engine**: First-In-First-Out promotion logic when an enrolled student withdraws or drops a course.
-- **Campus Facility Scheduling**: Real-time room capacity tracking and conflict detection for laboratories, auditoriums, and project pods.
-- **Tuition Invoice Generation & Settlement**: Automatic fee computation based on registered credits and lab components.
-- **Asynchronous Audit Logging**: Non-blocking concurrent audit logger preventing disk I/O bottlenecks.
-- **Data Persistence & CSV Exporter**: Java NIO.2 file storage for data preservation and external reporting.
-- **Interactive Console UI**: Beautiful ASCII table-formatted terminal interface.
+I built **SmartCampus** in Java to solve these exact problems. It is a console application that handles course registration, clash detection, waitlists, room booking, fee calculations, and background logging.
 
 ---
 
-## 3. Technologies and Tools Used
+## What the system does (Features)
 
-| Category | Technology / Tool | Purpose |
-| :--- | :--- | :--- |
-| **Language** | Java 17+ (LTS) | Core object-oriented programming implementation |
-| **Architecture** | Layered Modular Architecture | Separation of Model, Service, Repository, Concurrency, and CLI |
-| **Concurrency** | `java.util.concurrent` | `BlockingQueue`, `ExecutorService`, `ConcurrentHashMap`, `AtomicLong` |
-| **Functional Programming** | Java Stream API & Lambdas | Statistical aggregations, grouping collectors, and analytics |
-| **I/O & Persistence** | Java NIO.2 (`Files`, `Paths`) | File stream writing, CSV export, and log persistence |
-| **Build Automation** | Apache Maven & Windows Batch | Clean compilation, packaging, and execution |
-| **Testing** | JUnit 5 & Standalone Test Runner | Unit testing of core business logic and conflict detection |
-| **Documentation** | Markdown, Mermaid, Chrome PDF | High-definition PDF project report and UML diagrams |
+### 1. User Logins (Student, Faculty, Admin)
+- Passwords are encrypted using SHA-256 before being checked.
+- Different menus for students, teachers, and admins.
+- Each user type sees a customized dashboard when they log in.
+
+### 2. FFCS Course Registration & Clash Checks
+- View the catalog of offered courses, credit counts, faculty names, and remaining seats.
+- **Clash Detector:** If a student tries to register for a course that has the same day and time as an already registered course, the system blocks it and shows an error message explaining the clash.
+- **Prerequisite Check:** If a course requires an earlier course (e.g., Operating Systems requires OOP in Java), the system checks if you passed it first.
+- **Credit Limit:** Caps registrations at 27 credits per semester.
+- **Auto-Waitlist:** If a course is full, you are added to a waitlist. When another student drops that course, the first student on the waitlist is automatically promoted and enrolled.
+
+### 3. Campus Facility Booking
+- Students and teachers can request rooms (computer lab, seminar hall, library study pod).
+- The system checks dates and slots so no two bookings overlap.
+- Admins can log in to approve or reject pending requests.
+
+### 4. Fee Calculation & Invoicing
+- Calculates tuition based on registered credits (4,500 rupees per credit + lab fee + campus fee).
+- Generates an invoice that students can view and mark as paid.
+- Creates a transaction reference code when paid.
+
+### 5. Fast Background Logging (Multithreading)
+- Instead of slowing down user clicks by saving logs to disk immediately, actions are sent to an in-memory queue. A background worker thread saves them to a log file quietly without freezing the screen.
+
+### 6. Reports & Analytics
+- Uses Java Streams to calculate average CGPA, most popular courses, and department distribution.
 
 ---
 
-## 4. System Architecture & Package Structure
+## Tech Stack Used
+
+- **Language:** Java (JDK 17)
+- **Concepts Applied:** OOP (Inheritance, Polymorphism, Encapsulation, Abstract classes), Custom Exceptions, Collections (`ConcurrentHashMap`, `LinkedList`, `PriorityQueue`), Multithreading (`BlockingQueue`, `ExecutorService`), Streams & Lambdas, File I/O (`java.nio`).
+- **Build / Run:** Windows batch files (`run.bat`, `build.bat`) and Maven (`pom.xml`).
+- **Testing:** Custom test runner class + JUnit 5 tests.
+
+---
+
+## Project Structure
 
 ```
-com.smartcampus
-│
-├── Main.java                          # Application Entry Point & Lifecycle Hooks
-│
-├── model/                             # Domain Entities (OOP Abstraction & Inheritance)
-│   ├── User.java                      # Abstract Base User with SHA-256 Hashing
-│   ├── Role.java                      # RBAC Enumeration (STUDENT, FACULTY, ADMIN)
-│   ├── Student.java                   # Student Entity (Roll No, CGPA, Credits)
-│   ├── Faculty.java                   # Faculty Entity (Designation, Workload)
-│   ├── Admin.java                     # Administrator Entity (Permissions)
-│   ├── Course.java                    # Course Catalog Model & Waitlist Queue
-│   ├── TimeSlot.java                  # Slot Enum with Clash Detection Logic
-│   ├── Registration.java              # Enrollment Record & Lifecycle Status
-│   ├── Resource.java                  # Physical Campus Infrastructure Model
-│   ├── Reservation.java               # Facility Booking Request Model
-│   ├── Invoice.java                   # Financial Ledger & Payment Record
-│   └── AuditLog.java                  # Security & Transaction Audit Entry
-│
-├── exception/                         # Custom Exception Hierarchy
-│   ├── CampusException.java           # Base Checked Exception
-│   ├── AuthenticationException.java   # Credential & Access Failures
-│   ├── PrerequisiteNotMetException.java# Missing Prerequisite Guard
-│   ├── SlotClashException.java        # Timetable Conflict Interceptor
-│   ├── CreditLimitExceededException.java# Max Credit Cap Guard
-│   ├── ResourceUnavailableException.java# Booking Collision Interceptor
-│   └── EntityNotFoundException.java   # Missing Entity Lookup Error
-│
-├── repository/                        # Data Access Layer
-│   ├── DataRepository.java            # Generic Repository Interface (Generics)
-│   ├── InMemoryDataStore.java         # Thread-Safe Singleton Data Cache
-│   └── FilePersistenceManager.java    # Java NIO.2 Disk Persistence & CSV Exporter
-│
-├── service/                           # Business Logic Services
-│   ├── AuthService.java               # Authentication & Session Management
-│   ├── RegistrationService.java       # FFCS Engine & Waitlist Promotion
-│   ├── ResourceService.java           # Facility Booking & Admin Approvals
-│   ├── BillingService.java            # Per-Credit Tuition & Invoicing
-│   └── AnalyticsService.java          # Java Streams Institutional Intelligence
-│
-├── concurrency/                       # Multithreading Subsystem
-│   ├── AsyncAuditLogger.java          # Producer-Consumer Async Logger
-│   └── SystemMonitorWorker.java       # Scheduled Background Monitor
-│
-├── util/                              # Reusable Utility Helpers
-│   ├── TableFormatter.java            # ASCII Table Console Renderer
-│   └── Validator.java                 # Regex & Format Sanitizers
-│
-└── cli/                               # User Presentation Layer
-    └── ConsoleUI.java                 # Interactive Terminal Menus for All Roles
+SmartCampus/
+├── src/main/java/com/smartcampus/
+│   ├── model/         # User, Student, Faculty, Admin, Course, TimeSlot, Resource, Invoice
+│   ├── service/       # RegistrationService (clash & waitlist logic), AuthService, Billing, etc.
+│   ├── repository/    # In-memory storage & FilePersistenceManager (CSV export)
+│   ├── concurrency/   # AsyncAuditLogger (producer-consumer background thread)
+│   ├── exception/     # SlotClashException, PrerequisiteNotMetException, etc.
+│   ├── cli/           # Console menus and table formatting
+│   └── Main.java      # Program entry point
+├── src/test/java/     # Test classes and StandaloneTestRunner
+├── docs/              # Project report (.docx, .pdf, .md)
+├── pom.xml            # Maven configuration
+├── build.bat          # Compile script for Windows
+├── run.bat            # Run script for Windows
+├── statement.md       # Problem statement file for submission
+└── README.md          # Project readme
 ```
 
 ---
 
-## 5. Steps to Install & Run the Project
+## How to Install and Run
 
-### Prerequisites
-- Java Development Kit (JDK 17 or higher recommended, JDK 11+ compatible).
-- (Optional) Apache Maven 3.8+ if building via Maven.
-
-### Running with Windows Batch Scripts (Easiest)
-1. Open Command Prompt or PowerShell in the project root:
+### Running on Windows (Easiest way)
+1. Open Command Prompt or PowerShell in this folder:
    ```cmd
    cd C:\Users\hp\.gemini\antigravity\scratch\SmartCampus
    ```
-2. Build the project:
+2. Run the application:
    ```cmd
-   build.bat
+   .\run.bat
    ```
-3. Run the interactive console application:
+   *(This will automatically compile the code and start the interactive menu).*
+
+3. Or run the automated demo:
    ```cmd
-   run.bat
-   ```
-4. Run the automated end-to-end demonstration:
-   ```cmd
-   run.bat --demo
+   .\run.bat --demo
    ```
 
-### Running with Apache Maven
-1. Compile and package the project:
-   ```bash
-   mvn clean compile package
-   ```
-2. Run the generated executable JAR:
-   ```bash
-   java -jar target/smartcampus-core-1.0.0.jar
-   ```
+### Running with Maven
+If you use Maven:
+```bash
+mvn clean compile package
+java -jar target/smartcampus-core-1.0.0.jar
+```
 
 ---
 
-## 6. Pre-Configured Test Credentials
+## Login Credentials to Test
 
-| Role | Username | Password | Notes |
+You can log in with any of these pre-seeded accounts:
+
+| Role | Username | Password | Details |
 | :--- | :--- | :--- | :--- |
-| **Student** | `student` | `student123` | Aarav Patel (Roll: 24BCY10203, CGPA: 9.15) |
-| **Student** | `priya.nair` | `student123` | Priya Nair (Roll: 24BCS10145, CGPA: 8.84) |
+| **Student** | `student` | `student123` | Aarav Patel (3rd Sem, 9.15 CGPA) |
+| **Student** | `priya.nair` | `student123` | Priya Nair (3rd Sem, 8.84 CGPA) |
 | **Faculty** | `prof.ananya` | `faculty123` | Dr. Ananya Sharma (CSE Professor) |
-| **Faculty** | `prof.rajesh` | `faculty123` | Dr. Rajesh Verma (CSE Associate Prof) |
-| **Admin** | `admin` | `admin123` | Dr. S. K. Narayanan (Dean Academics) |
+| **Admin** | `admin` | `admin123` | Academic Dean Account |
 
 ---
 
-## 7. Instructions for Testing
+## How Testing Works
 
-### Option A: Standalone Zero-Dependency Test Suite
-SmartCampus includes a standalone test runner that requires no external Maven dependencies:
+To run the automated tests, run:
 ```cmd
-run.bat --test
-```
-or directly:
-```bash
-javac -cp target/classes -d target/test-classes src/test/java/com/smartcampus/StandaloneTestRunner.java
-java -cp target/classes;target/test-classes com.smartcampus.StandaloneTestRunner
+.\run.bat --test
 ```
 
-### Option B: Maven Surefire Test Execution
-```bash
-mvn test
-```
+This runs `StandaloneTestRunner.java`, which verifies 8 different test cases:
+1. Normal course registration works.
+2. Registering two courses in the same slot throws `SlotClashException`.
+3. Registering without prerequisites throws `PrerequisiteNotMetException`.
+4. Dropping a course deducts credits and frees up the seat.
+5. Facility booking works and creates a pending request.
+6. Double-booking the same room on the same slot is blocked.
+7. Tuition fee calculation and invoice payment marks status as paid.
+8. Stream analytics returns accurate values.
 
-### What is Tested:
-- **FFCS Registration Success**: Validates course enrollment under valid conditions.
-- **Slot Clash Detection**: Tests that registering conflicting courses throws `SlotClashException`.
-- **Prerequisite Enforcement**: Verifies that unfulfilled prerequisites throw `PrerequisiteNotMetException`.
-- **Course Withdrawal**: Confirms credit balance updates and seat de-allocation.
-- **Waitlist Auto-Promotion**: Verifies that dropping a course promotes the first waitlisted student.
-- **Facility Reservation Conflicts**: Ensures overlapping resource bookings are rejected.
-- **Tuition Fee Calculation**: Verifies per-credit fee computations and payment reconciliation.
-- **Stream Analytics**: Validates summary statistics and average CGPA aggregations.
+All 8 tests pass with a 100% success rate.
 
 ---
 
-## 8. Terminal Screenshots / Execution Sample
+## Sample Program Output
 
 ```
 =================================================================
@@ -199,10 +158,6 @@ mvn test
  0. Exit System
 -----------------------------------------------------------------
 Enter choice: 4
-
-######################################################################
-  EXECUTING SMARTCAMPUS AUTOMATED DEMONSTRATION & VERIFICATION SUITE
-######################################################################
 
 [DEMO 1] Testing Student Authentication...
  -> Student: Aarav Patel | Roll No: 24BCY10203 | Dept: Computer Science & Engineering (Cyber Security) | Sem: 3 | CGPA: 9.15 | Registered Credits: 0/27
@@ -227,26 +182,11 @@ Enter choice: 4
  -> Invoice paid! Transaction Ref: TXN-A8F1C32D (Status: PAID)
 
 [DEMO 8] Generating Real-Time Institutional Analytics...
-===============================================================
-         SMARTCAMPUS EXECUTIVE ANALYTICS REPORT                
-===============================================================
  Total Enrolled Students  : 2
  Total Teaching Faculty   : 3
  Active Course Offerings  : 6
- Confirmed Enrollments    : 1
  Average Student CGPA     : 9.00 / 10.00
- Campus Facility Bookings : 1
  Settled Tuition Revenue  : INR 30,000.00
- Outstanding Receivables  : INR 0.00
----------------------------------------------------------------
 
 >>> ALL DEMONSTRATION TEST FLOWS PASSED WITH 100% SUCCESS! <<<
 ```
-
----
-
-## 9. Submission Artifacts
-- **Official Project Report (PDF)**: `docs/SmartCampus_Project_Report.pdf`
-- **Official Problem Statement**: `statement.md`
-- **Full Source Code**: `src/main/java/` & `src/test/java/`
-- **Data & Logs**: `data/` directory with exported CSVs and audit trails.
