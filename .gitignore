@@ -1,0 +1,21 @@
+# Java build artifacts
+target/
+*.class
+
+# Windows / OS artifacts
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE configuration
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Logs
+*.log
+sources.txt
+test_sources.txt
